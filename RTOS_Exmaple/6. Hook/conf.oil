@@ -1,0 +1,93 @@
+CPU mySystem {
+	
+	OS myOs {
+		EE_OPT = "DEBUG";
+		
+		STARTUPHOOK = TRUE;
+		PRETASKHOOK = TRUE;
+		POSTTASKHOOK = TRUE;
+		
+		USERESSCHEDULER = FALSE;
+		
+		CPU_DATA = AVR8{
+			MULTI_STACK = FALSE;
+		};
+		
+		MCU_DATA = MEGA{
+			MODEL = MEGA_328p;
+		};
+        
+		LIB = ARDUINO{
+			SDK_BOARD = UNO;
+			
+			VARIANT = CC{
+				VERSION = "1.8.16";
+			};
+			
+			STAND_ALONE = TRUE;		// Generate arduino libraries
+		};
+		
+		KERNEL_TYPE = OSEK{
+			CLASS = ECC2;	// Default
+		};
+		
+	};
+	
+	APPDATA myApp {
+		APP_SRC = "bsw.cpp";
+		APP_SRC = "asw.c";
+		APP_SRC = "serial.cpp";
+	};
+	
+	TASK Task1 {
+		PRIORITY = 2;
+		STACK = SHARED;
+		SCHEDULE = FULL;
+		AUTOSTART = FALSE;
+        ACTIVATION = 1;
+	};
+	
+	TASK Task2 {
+		PRIORITY = 1;
+		STACK = SHARED;
+		SCHEDULE = FULL;
+		AUTOSTART = FALSE;
+        ACTIVATION = 1;
+	};
+	
+	COUNTER counter1 {	//manual counter
+        MINCYCLE = 1;
+        MAXALLOWEDVALUE = 127;
+        TICKSPERBASE = 1;
+    };
+    
+    ALARM alarm1 {
+        COUNTER = counter1;
+        ACTION = ACTIVATETASK
+        {
+            TASK = Task1;
+        };
+        AUTOSTART = TRUE {
+            ALARMTIME = 5;	// Release Time
+            CYCLETIME = 5;	// Cycle Time
+        };
+    };
+    
+    ALARM alarm2 {
+        COUNTER = counter1;
+        ACTION = ACTIVATETASK
+        {
+            TASK = Task2;
+        };
+        AUTOSTART = TRUE {
+            ALARMTIME = 5;
+            CYCLETIME = 10;
+        };
+    };
+
+    ISR TimerISR {
+		CATEGORY = 2;
+		SOURCE = "TIMER1_COMPA"; /* TODO: Set correct ENTRY name. */
+		/* PRIORITY = LOW; */	 /* FIXED HARDWARE PRIORITY */
+	};
+};
