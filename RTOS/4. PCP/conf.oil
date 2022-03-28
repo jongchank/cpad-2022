@@ -1,0 +1,121 @@
+CPU mySystem {
+	
+	OS myOs {
+		EE_OPT = "DEBUG";
+
+		USERESSCHEDULER = FALSE;
+		
+		CPU_DATA = AVR8{
+			MULTI_STACK = FALSE;
+		};
+		
+		MCU_DATA = MEGA{
+			MODEL = MEGA_328p;
+		};
+        
+		LIB = ARDUINO{
+			SDK_BOARD = UNO;
+			
+			VARIANT = CC{
+				VERSION = "1.8.16";
+			};
+			
+			STAND_ALONE = TRUE;		// Generate arduino libraries
+		};
+		
+		KERNEL_TYPE = OSEK{
+			CLASS = ECC2;	// Default
+		};
+		
+	};
+	
+	RESOURCE S1{	// Lock variable
+		RESOURCEPROPERTY = STANDARD;	//the default used for a normal resource
+	};
+	
+	RESOURCE S2{
+		RESOURCEPROPERTY = STANDARD;
+	};
+	
+	APPDATA myApp {
+		APP_SRC = "bsw.cpp";
+		APP_SRC = "asw.c";
+		APP_SRC = "serial.cpp";
+	};
+	
+	TASK TaskH {
+		PRIORITY = 3;		
+		STACK = SHARED;
+		SCHEDULE = FULL;
+		AUTOSTART = FALSE;
+		ACTIVATION = 1;
+		RESOURCE = S1;
+		RESOURCE = S2;
+	};
+    
+    TASK TaskM {
+		PRIORITY = 2;		
+		STACK = SHARED;
+		SCHEDULE = FULL;
+		AUTOSTART = FALSE;
+        ACTIVATION = 1;
+		RESOURCE = S2;
+	};
+    
+    TASK TaskL {
+		PRIORITY = 1;		
+		STACK = SHARED;
+		SCHEDULE = FULL;
+		AUTOSTART = FALSE;
+        ACTIVATION = 1;
+		RESOURCE = S1;
+	};
+	
+	COUNTER counter1 {	//manual counter
+        MINCYCLE = 1;
+        MAXALLOWEDVALUE = 127;
+        TICKSPERBASE = 1;
+    };
+	
+    ALARM alarm1 {
+        COUNTER = counter1;
+        ACTION = ACTIVATETASK
+        {
+            TASK = TaskH;
+        };
+        AUTOSTART = TRUE {
+            ALARMTIME = 10;		
+            CYCLETIME = 20;		
+        };
+    };
+
+    ALARM alarm2 {
+        COUNTER = counter1;
+        ACTION = ACTIVATETASK
+        {
+            TASK = TaskM;
+        };
+        AUTOSTART = TRUE {
+            ALARMTIME = 9;		
+            CYCLETIME = 20;
+        };
+    };
+    
+    ALARM alarm3 {
+        COUNTER = counter1;
+        ACTION = ACTIVATETASK
+        {
+            TASK = TaskL;
+        };
+        AUTOSTART = TRUE {
+            ALARMTIME = 5;		
+            CYCLETIME = 20;
+        };
+    };
+    
+    ISR TimerISR {
+		CATEGORY = 2;
+		SOURCE = "TIMER1_COMPA"; /* TODO: Set correct ENTRY name. */
+		/* PRIORITY = LOW; */	 /* FIXED HARDWARE PRIORITY */
+	};
+};
