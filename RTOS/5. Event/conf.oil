@@ -84,7 +84,7 @@ CPU mySystem {
             TASK = Task2;
         };
         AUTOSTART = TRUE {
-            ALARMTIME = 2;
+            ALARMTIME = 7;
             CYCLETIME = 5;
         };
     };
