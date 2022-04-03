@@ -109,19 +109,15 @@ CPU mySystem {
 			START_VALUE = 5;	// Starting ticks
 		};
 		
+		
 		/* Write the expire points in the order that you want to execute it */
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 0;	// Release time in schedule table duration
 			ACTION = ACTIVATETASK { TASK = TaskH; };
-		};
-		EXPIRE_POINT = ACTION {
-			EXPIRE_VALUE = 0;
 			ACTION = ACTIVATETASK { TASK = TaskM; };
-		};
-		EXPIRE_POINT = ACTION {
-			EXPIRE_VALUE = 0;
 			ACTION = ACTIVATETASK { TASK = TaskL; };
 		};
+		
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 5;
 			ACTION = ACTIVATETASK { TASK = TaskH; };
@@ -129,27 +125,21 @@ CPU mySystem {
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 10;		
 			ACTION = ACTIVATETASK { TASK = TaskH; };
-		};
-		EXPIRE_POINT = ACTION {
-			EXPIRE_VALUE = 10;		
 			ACTION = ACTIVATETASK { TASK = TaskM; };
 		};
+		
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 15;
 			ACTION = ACTIVATETASK { TASK = TaskH; };
+			ACTION = ACTIVATETASK { TASK = TaskL; };
 		};
-		EXPIRE_POINT = ACTION {
-			EXPIRE_VALUE = 15;		
-			ACTION = ACTIVATETASK { TASK = TaskL; };	
-		};
+		
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 20;
 			ACTION = ACTIVATETASK { TASK = TaskH; };	
+			ACTION = ACTIVATETASK { TASK = TaskM; };
 		};
-		EXPIRE_POINT = ACTION {
-			EXPIRE_VALUE = 20;
-			ACTION = ACTIVATETASK { TASK = TaskM; };	
-		};
+		
 		EXPIRE_POINT = ACTION {
 			EXPIRE_VALUE = 25;
 			ACTION = ACTIVATETASK { TASK = TaskH; };	
