@@ -1,3 +1,0 @@
-/home/nvidia/lanedetection/build/CMakeFiles/rebuild_cache.dir
-/home/nvidia/lanedetection/build/CMakeFiles/LaneDetection.dir
-/home/nvidia/lanedetection/build/CMakeFiles/edit_cache.dir
