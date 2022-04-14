@@ -561,10 +561,10 @@ int main() {
     int bot_height = height_ * b_height;
 
     corners_.resize(4);
-    corners_[0] = Point2f(top_gap + width_offset, bot_height);
-    corners_[1] = Point2f((width_ - top_gap) + width_offset + 15, bot_height);
-    corners_[2] = Point2f(bot_gap + width_offset, top_height);
-    corners_[3] = Point2f((width_ - bot_gap) + width_offset, top_height);
+    corners_[0] = Point2f(top_gap + width_offset, top_height);
+    corners_[1] = Point2f((width_ - top_gap) + width_offset + 15, top_height);
+    corners_[2] = Point2f(bot_gap + width_offset, bot_height);
+    corners_[3] = Point2f((width_ - bot_gap) + width_offset, bot_height);
 
     warpCorners_.resize(4);
     warpCorners_[0] = Point2f(extra_up, 0.0);
