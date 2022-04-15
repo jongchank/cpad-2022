@@ -552,8 +552,8 @@ int main() {
     float t_height = f;
     float b_height = f;
     int width_offset = 5;
-    int extra_up = 160;
-    int extra_down = 210;
+    int extra_up = 100;
+    int extra_down = 120;
 
     int top_gap = width_ * t_gap;
     int bot_gap = width_ * b_gap;
