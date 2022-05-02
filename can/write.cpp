@@ -91,9 +91,14 @@ void write_port()
     frame.can_id = 0x123;
     frame.can_dlc = 8;
 
+    int s1[8];
 
-    for (int i = 0; i < frame.can_dlc; i++){
-        frame.data[i] = rand() % 255;
+    printf("Enter 8 numbers 0~255 \n");
+
+    for (int i = 0; i < frame.can_dlc; i++)
+    {
+        scanf("%d", &s1[i]);
+        frame.data[i] = s1[i];        
     }
 	
 	ssize_t nbytes = write(soc, &frame, sizeof(struct can_frame));
@@ -113,7 +118,8 @@ int main(void)
 {
  
 	open_port("can0");
-    while(60){
+    while(60)
+    {
         sleep(2);
     	write_port();
     }	

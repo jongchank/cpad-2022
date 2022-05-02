@@ -46,50 +46,6 @@ int open_port(const char *port)
 
 
 /* this is just an example, run in a thread */
-void read_port2()
-{
-    struct can_frame frame;
-    int recvbytes = 0;
-    read_can_port = 1;
-    while(read_can_port)
-    {
-	printf("hi");
-        struct timeval timeout = {1, 0};
-        fd_set readSet;
-        FD_ZERO(&readSet);
-        FD_SET(soc, &readSet);
-        if (select((soc + 1), &readSet, NULL, NULL, &timeout) >= 0)
-        {
-            if (!read_can_port)
-            {
-		printf("error!");
-                break;
-
-            }
-            if (FD_ISSET(soc, &readSet))
-            {
-                recvbytes = read(soc, &frame, sizeof(struct can_frame));
-		        //printf("error!");
-                if(recvbytes)
-                {
-    		        //printf("data = %02x\n", frame_rd.data[1]);
-		                       
-	            if(frame.can_id == 123)
-                    {
-                        for (int i = 0; i < frame.can_dlc; i++) 
-                        {
-  				printf("%02x", frame.data[i]);			                          
-                        }
-		                printf("\n");
-                    }
-
-                }
-            }
-        }
-    }
-}
-
-/* this is just an example, run in a thread */
 void read_port()
 {
     struct can_frame frame;
@@ -116,10 +72,9 @@ void read_port()
                 { 
 	                if(frame.can_id == 0x123)
                     {
-                        printf("id = 123 \n");
                         for (int i = 0; i < frame.can_dlc; i++) 
                         {
-	                        if (i == 2 || i == 5) printf("frame1[%d] = %02x \n", i, frame.data[i]);			                          
+	                        printf("frame[%d] = %02x, %d\n", i, frame.data[i], frame.data[i]);			                          
                         }
                     }
                     printf("\n");
