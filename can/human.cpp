@@ -957,31 +957,35 @@ static void common_drive(int index, tCarElt* car, tSituation *s)
 	printf("RPM: %f\n", car_rpm);
 	printf("========================================\n");
 
-	/*cansend init*/
+	/*==============cansend init==============*/
+
 	int soc;
-	int speed_value, speed_1b, speed_2b;
-	int yaw_value, yaw_1b, yaw_2b;
-	int rpm_value, rpm_1b, rpm_2b;
-	char name[] = "can0";
-
-	/*==============open port==============*/
-    struct ifreq ifr;
-    struct sockaddr_can addr;
-
-    soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-
-    addr.can_family = AF_CAN;
-    strcpy(ifr.ifr_name, name);
-
-    if (ioctl(soc, SIOCGIFINDEX, &ifr) < 0) printf("error!");
-
-    addr.can_ifindex = ifr.ifr_ifindex;
-    fcntl(soc, F_SETFL, O_NONBLOCK);
-
-    if (bind(soc, (struct sockaddr *)&addr, sizeof(addr)) < 0) printf("binding error!");
+	short speed_value, yaw_value, rpm_value;
+        char speed_1b, speed_2b, yaw_1b, yaw_2b, rpm_1b, rpm_2b;
+	char name[] = "vcan0";
 
 	/*==========================================*/
 
+
+	/*==============open port==============*/
+
+        struct ifreq ifr;
+        struct sockaddr_can addr;
+
+        soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+
+        addr.can_family = AF_CAN;
+        strcpy(ifr.ifr_name, name);
+
+        if (ioctl(soc, SIOCGIFINDEX, &ifr) < 0) printf("error! \n");
+
+        memset(&addr, 0, sizeof(addr));
+        addr.can_ifindex = ifr.ifr_ifindex;
+        fcntl(soc, F_SETFL, O_NONBLOCK);
+
+        if (bind(soc, (struct sockaddr *)&addr, sizeof(addr)) < 0) printf("binding error! \n");
+
+	/*==========================================*/
 
 
 	/*==============define data frame==============*/ 
@@ -990,13 +994,17 @@ static void common_drive(int index, tCarElt* car, tSituation *s)
 	frame.can_id = 0x123;
 	frame.len = 8;
 
-    /*write down your code*/
+        /*fill your code*/
 
-    
+
+
+
+
 	/*==========================================*/
 	
 
 	/*==============write data==============*/
+
 	ssize_t nbytes = write(soc, &frame, sizeof(struct can_frame));
 
 	if(nbytes < 1) printf("send error! \n");
