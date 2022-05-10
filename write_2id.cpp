@@ -52,12 +52,12 @@ void write_port()
     srand(time(NULL));
 
     struct can_frame frame1;	
-	frame1.can_id = 0x123;
-	frame1.can_dlc = 8;
+    frame1.can_id = 0x123;
+    frame1.can_dlc = 8;
 
     struct can_frame frame2;	
-	frame2.can_id = 0x456;
-	frame2.can_dlc = 8;
+    frame2.can_id = 0x456;
+    frame2.can_dlc = 8;
 
     short s1[4];
     int i1[2];
@@ -90,17 +90,18 @@ void write_port()
     frame2.data[6] = (i1[1]&0xFF00FF00) >> 8;
     frame2.data[7] = (i1[1]&0x000000FF);    
     
-	ssize_t nbytes1 = write(soc, &frame1, sizeof(struct can_frame));
-	ssize_t nbytes2 = write(soc, &frame2, sizeof(struct can_frame));
+    ssize_t nbytes1 = write(soc, &frame1, sizeof(struct can_frame));
+    ssize_t nbytes2 = write(soc, &frame2, sizeof(struct can_frame));
 
-	if(nbytes1 < 1)
-	{
-		printf("send error!\n");
-	}
-	if(nbytes2 < 1)
-	{
-		printf("send error!\n");
-	}
+    if(nbytes1 < 1)
+    {
+	printf("send error!\n");
+    }
+	
+    if(nbytes2 < 1)
+    {
+	printf("send error!\n");
+    }
 
 }
 int close_port()
