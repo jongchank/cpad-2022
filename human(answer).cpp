@@ -965,20 +965,20 @@ static void common_drive(int index, tCarElt* car, tSituation *s)
 	char name[] = "can0";
 
 	/*==============open port==============*/
-    struct ifreq ifr;
-    struct sockaddr_can addr;
+        struct ifreq ifr;
+        struct sockaddr_can addr;
 
-    soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+        soc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
-    addr.can_family = AF_CAN;
-    strcpy(ifr.ifr_name, name);
+        addr.can_family = AF_CAN;
+        strcpy(ifr.ifr_name, name);
 
-    if (ioctl(soc, SIOCGIFINDEX, &ifr) < 0) printf("error!");
+        if (ioctl(soc, SIOCGIFINDEX, &ifr) < 0) printf("error!");
 
-    addr.can_ifindex = ifr.ifr_ifindex;
-    fcntl(soc, F_SETFL, O_NONBLOCK);
+        addr.can_ifindex = ifr.ifr_ifindex;
+        fcntl(soc, F_SETFL, O_NONBLOCK);
 
-    if (bind(soc, (struct sockaddr *)&addr, sizeof(addr)) < 0) printf("binding error!");
+        if (bind(soc, (struct sockaddr *)&addr, sizeof(addr)) < 0) printf("binding error!");
 
 	/*==========================================*/
 
@@ -990,8 +990,8 @@ static void common_drive(int index, tCarElt* car, tSituation *s)
 	frame.can_id = 0x123;
 	frame.len = 8;
 
-    speed_value = (short)(car_speed);
-    //speed_value = (short)(car_speed*100);
+        speed_value = (short)(car_speed);
+    	//speed_value = (short)(car_speed*100);
 	speed_1b = (speed_value&0xFF00)>>8;
 	speed_2b = speed_value&0x00FF;
 	
@@ -1003,7 +1003,7 @@ static void common_drive(int index, tCarElt* car, tSituation *s)
 	rpm_value = (short)(car_rpm);
 	//rpm_value = (short)(car_rpm/40)-128;
 	rpm_1b = (rpm_value&0xFF00)>>8;
-    rpm_2b = rpm_value&0x00FF;
+    	rpm_2b = rpm_value&0x00FF;
 
 	frame.data[0] = speed_1b;
 	frame.data[1] = speed_2b;
