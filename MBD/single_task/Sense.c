@@ -37,7 +37,7 @@ void Sense_step(void)
 
   /* Outputs for Atomic SubSystem: '<Root>/Sense' */
   /* Sin: '<S1>/Sine Wave' */
-  if (Sense_DW.systemEnable != 0) {                     // 언제 변하지?
+  if (Sense_DW.systemEnable != 0) {                     
     lastSin_tmp = ((Sense_M->Timing.clockTick0) * 0.1);
     Sense_DW.lastSin = sin(lastSin_tmp);
     Sense_DW.lastCos = cos(lastSin_tmp);
