@@ -18,8 +18,8 @@
  */
 
 #include <stddef.h>
-#include <stdio.h>              /* This ert_main.c example uses printf/fflush */
-#include "Actuate.h"                   /* Model's header file */
+#include <stdio.h>   /* This ert_main.c example uses printf/fflush */
+#include "Actuate.h" /* Model's header file */
 #include "rtwtypes.h"
 
 #include <string.h>
@@ -30,6 +30,8 @@
 #include "Actuate.h"
 #include <unistd.h>
 #include <time.h>
+
+static timer_t timer_100ms, timer_200ms, timer_400ms;
 
 /*t
  * Associating rt_OneStep with a real-time clock or interrupt service routine
@@ -53,7 +55,8 @@ void rt_OneStep_Sense(void)
     /* Disable interrupts here */
 
     /* Check for overrun */
-    if (OverrunFlag) {
+    if (OverrunFlag)
+    {
         rtmSetErrorStatus(Sense_M, "Overrun");
         return;
     }
@@ -84,7 +87,8 @@ void rt_OneStep_Compute(void)
     /* Disable interrupts here */
 
     /* Check for overrun */
-    if (OverrunFlag) {
+    if (OverrunFlag)
+    {
         rtmSetErrorStatus(Compute_M, "Overrun");
         return;
     }
@@ -115,7 +119,8 @@ void rt_OneStep_Actuate(void)
     /* Disable interrupts here */
 
     /* Check for overrun */
-    if (OverrunFlag) {
+    if (OverrunFlag)
+    {
         rtmSetErrorStatus(Actuate_M, "Overrun");
         return;
     }
@@ -139,13 +144,67 @@ void rt_OneStep_Actuate(void)
     /* Enable interrupts here */
 }
 
-/* --------- Write below your code ----------------*/
+static void handler_100ms(int sig, siginfo_t *si, void *uc)
+{
+    static int c = 0;
+
+    if (*(timer_t *)(si->si_value.sival_ptr) != timer_100ms || sig != SIGRTMIN)
+    {
+        printf("Wrong handler\n");
+        return;
+    }
+
+    /* --------- Write below your code ----------------*/
 
 
 
 
 
-/* --------------------- end --------------------- */
+
+    /* --------------------- end --------------------- */
+
+    return;
+}
+
+static void handler_200ms(int sig, siginfo_t *si, void *uc)
+{
+    if (*(timer_t *)(si->si_value.sival_ptr) != timer_200ms || sig != SIGRTMIN + 1)
+    {
+        printf("Wrong handler\n");
+        return;
+    }
+
+    /* --------- Write below your code ----------------*/
+
+    
+    
+    
+    
+    
+    /* --------------------- end --------------------- */
+
+    return;
+}
+
+static void handler_400ms(int sig, siginfo_t *si, void *uc)
+{
+    if (*(timer_t *)(si->si_value.sival_ptr) != timer_400ms || sig != SIGRTMIN + 2)
+    {
+        printf("Wrong handler\n");
+        return;
+    }
+
+    /* --------- Write below your code ----------------*/
+
+   
+   
+   
+   
+   
+    /* --------------------- end --------------------- */
+
+    return;
+}
 
 static int register_handler(timer_t *timer, int signo, int sec, int msec, int isec, int imsec, void (*handler)(int, siginfo_t *, void *))
 {
@@ -157,7 +216,8 @@ static int register_handler(timer_t *timer, int signo, int sec, int msec, int is
     sa.sa_flags = SA_SIGINFO;
     sa.sa_sigaction = handler;
     sigemptyset(&sa.sa_mask);
-    if (sigaction(signo, &sa, NULL) == -1) {
+    if (sigaction(signo, &sa, NULL) == -1)
+    {
         perror("sigaction");
     }
 
@@ -192,14 +252,13 @@ int_T main(int_T argc, const char *argv[])
     Sense_initialize();
     Compute_initialize();
     Actuate_initialize();
-    
-    /* --------- Write below your code ----------------*/
 
-        
-    
+    register_handler(&timer_100ms, SIGRTMIN, 1, 0, 0, 100, &handler_100ms); // 100ms
+    usleep(1000);
+    register_handler(&timer_200ms, SIGRTMIN + 1, 1, 0, 0, 200, &handler_200ms); // 200ms
+    usleep(1000);
+    register_handler(&timer_400ms, SIGRTMIN + 2, 1, 0, 0, 400, &handler_400ms); // 400ms
 
-    /* --------------------- end --------------------- */
-    
     printf("System runs...\n");
     fflush((NULL));
 

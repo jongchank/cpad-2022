@@ -18,8 +18,8 @@
  */
 
 #include <stddef.h>
-#include <stdio.h>              /* This ert_main.c example uses printf/fflush */
-#include "Actuate.h"                   /* Model's header file */
+#include <stdio.h>   /* This ert_main.c example uses printf/fflush */
+#include "Actuate.h" /* Model's header file */
 #include "rtwtypes.h"
 
 #include <string.h>
@@ -55,7 +55,8 @@ void rt_OneStep_Sense(void)
   /* Disable interrupts here */
 
   /* Check for overrun */
-  if (OverrunFlag) {
+  if (OverrunFlag)
+  {
     rtmSetErrorStatus(Sense_M, "Overrun");
     return;
   }
@@ -86,7 +87,8 @@ void rt_OneStep_Compute(void)
   /* Disable interrupts here */
 
   /* Check for overrun */
-  if (OverrunFlag) {
+  if (OverrunFlag)
+  {
     rtmSetErrorStatus(Compute_M, "Overrun");
     return;
   }
@@ -117,7 +119,8 @@ void rt_OneStep_Actuate(void)
   /* Disable interrupts here */
 
   /* Check for overrun */
-  if (OverrunFlag) {
+  if (OverrunFlag)
+  {
     rtmSetErrorStatus(Actuate_M, "Overrun");
     return;
   }
@@ -142,63 +145,59 @@ void rt_OneStep_Actuate(void)
 }
 
 /* Calculate the model every 100ms */
-/* -----------------------------------------------------------------
-/* func: void handler(int sig, siginfo_t *info, void *ucontext)
- * arguments 
- *  - sig: number of signal that invocate handler
- *  - *info: pointer to siginfo
- *  - *ucontext: pointer to ucontext_t
- * ---------------------------------------------------------------- */
 static void handler_100ms(int sig, siginfo_t *si, void *uc)
 {
-    static int c = 0;
+  static int c = 0;
 
-    if (*(timer_t *)(si->si_value.sival_ptr) != timer_100ms || sig != SIGRTMIN) {
-        printf("Wrong handler\n");
-        return;
-    }
-
-    /* --------- Write below your code ----------------*/
-
-
-
-
-    /* --------------------- end --------------------- */
+  if (*(timer_t *)(si->si_value.sival_ptr) != timer_100ms || sig != SIGRTMIN)
+  {
+    printf("Wrong handler\n");
     return;
+  }
+
+  /* --------- Write below your code ----------------*/
+
+
+
+
+
+
+  /* --------------------- end --------------------- */
+  return;
 }
 
 static int register_handler(timer_t *timer,
                             int signo,
-                            int sec, int msec,      /* time to first */
-                            int isec, int imsec,    /* periodic interval */
+                            int sec, int msec,   /* time to first */
+                            int isec, int imsec, /* periodic interval */
                             void (*handler)(int, siginfo_t *, void *))
 {
-    struct sigevent se;
-    struct itimerspec its;
-    struct sigaction sa;  
+  struct sigevent se;
+  struct itimerspec its;
+  struct sigaction sa;
 
-    /* Set up signal handler. */
-    sa.sa_flags = SA_SIGINFO;                 // can use 'sa_sigaction' function with three arguments
-    sa.sa_sigaction = handler;                // signal handler designate
-    sigemptyset(&sa.sa_mask);                 // clear all blocked signal set (sa_mask : signal to block set when sig_handler is operating)
-    if (sigaction(signo, &sa, NULL) == -1) {  // signal process 
-        perror("sigaction");
-    }
+  /* Set up signal handler. */
+  sa.sa_flags = SA_SIGINFO;
+  sa.sa_sigaction = handler;
+  sigemptyset(&sa.sa_mask);
+  if (sigaction(signo, &sa, NULL) == -1)
+  {
+    perror("sigaction");
+  }
 
-    /* Set and enable alarm */
-    se.sigev_notify = SIGEV_SIGNAL;           // Notification method (send signal in sigev_signo)
-    se.sigev_signo = signo;                   // Notification signal
-    se.sigev_value.sival_ptr = timer;         // Data passed with notification (Pointer value)
-    timer_create(CLOCK_REALTIME, &se, timer); // (timer clock id : real-time, time event, generated time id);
+  /* Set and enable alarm */
+  se.sigev_notify = SIGEV_SIGNAL;
+  se.sigev_signo = signo;
+  se.sigev_value.sival_ptr = timer;
+  timer_create(CLOCK_REALTIME, &se, timer);
 
-    its.it_value.tv_sec = sec;                // it_value: the first expiration date
-    its.it_value.tv_nsec = msec * 1000000;
-    its.it_interval.tv_sec = isec;            // it_interval: period of timer
-    its.it_interval.tv_nsec = imsec * 1000000;   
-    /* Set the timer interval time for the returned timer id. */
-    timer_settime(*timer, 0, &its, NULL); // (time id, feature flag, new_value(setting value), old_value);
+  its.it_value.tv_sec = sec;
+  its.it_value.tv_nsec = msec * 1000000;
+  its.it_interval.tv_sec = isec;
+  its.it_interval.tv_nsec = imsec * 1000000;
+  timer_settime(*timer, 0, &its, NULL);
 
-    return 0;
+  return 0;
 }
 
 /*
@@ -218,8 +217,8 @@ int_T main(int_T argc, const char *argv[])
   Compute_initialize();
   Actuate_initialize();
 
-  register_handler(&timer_100ms, SIGRTMIN, 1, 0, 0, 100, &handler_100ms); //100ms
-  
+  register_handler(&timer_100ms, SIGRTMIN, 1, 0, 0, 100, &handler_100ms); // 100ms
+
   printf("System runs...\n");
   fflush((NULL));
 
@@ -227,7 +226,7 @@ int_T main(int_T argc, const char *argv[])
          rtmGetErrorStatus(Compute_M) == (NULL) &&
          rtmGetErrorStatus(Actuate_M) == (NULL))
   {
-      /*  Perform other application tasks here */
+    /*  Perform other application tasks here */
   }
 
   /* Disable rt_OneStep() here */

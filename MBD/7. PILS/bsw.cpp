@@ -2,21 +2,25 @@
 #include "Arduino.h"
 #include "serial.h"
 
-#define TIMER1_US	1000000U	/* 1 sec */
+#define TIMER1_US 100000U /* 100 ms */
 
-extern "C"{
+extern "C"
+{
 
-void mdelay(unsigned long delay_ms){
-	unsigned long prev_ms = millis(), current_ms = millis();
-	unsigned long period_ms = 20, cnt = 0;
-	while(cnt < (delay_ms / period_ms)){
-		current_ms = millis();
-		if(current_ms - prev_ms >= period_ms){
-			cnt++;
-			prev_ms = millis();
+	void mdelay(unsigned long delay_ms)
+	{
+		unsigned long prev_ms = millis(), current_ms = millis();
+		unsigned long period_ms = 20, cnt = 0;
+		while (cnt < (delay_ms / period_ms))
+		{
+			current_ms = millis();
+			if (current_ms - prev_ms >= period_ms)
+			{
+				cnt++;
+				prev_ms = millis();
+			}
 		}
 	}
-}
 
 } /* extern "C" */
 
@@ -39,9 +43,9 @@ int main(void)
 #if defined(USBCON)
 	USBDevice.attach();
 #endif
-	
+
 	setup();
 
-	StartOS(OSDEFAULTAPPMODE);	/* never returns */
+	StartOS(OSDEFAULTAPPMODE); /* never returns */
 	return 0;
 }
