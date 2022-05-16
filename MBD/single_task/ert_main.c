@@ -155,14 +155,15 @@ static void handler_100ms(int sig, siginfo_t *si, void *uc)
     return;
   }
 
-  /* --------- Write below your code ----------------*/
+    rt_OneStep_Sense();
+    Compute_U.in = Sense_Y.out;
+    printf("%4d: %f ", c++ * 10, Sense_Y.out);
+    rt_OneStep_Compute();
+    Actuate_U.in = Compute_Y.out;
+    printf("-> %f ", Compute_Y.out);
+    rt_OneStep_Actuate();
+    printf("-> %f\n", Actuate_Y.out );
 
-
-
-
-
-
-  /* --------------------- end --------------------- */
   return;
 }
 
