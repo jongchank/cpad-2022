@@ -6,7 +6,11 @@ void mdelay(unsigned long delay_ms);
 
 void StartupHook(void)
 {
-	/**/
+	/* write below your code */
+
+
+               /*end*/
+
     printfSerial("\nOS Begins... ", 0ul);
 }
 
@@ -23,5 +27,5 @@ ISR2(TimerISR)
 
 
 
-/*end*/
+        /*end*/
 
