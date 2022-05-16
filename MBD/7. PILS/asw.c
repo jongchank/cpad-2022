@@ -4,6 +4,12 @@
 
 void mdelay(unsigned long delay_ms);
 
+void StartupHook(void)
+{
+	/**/
+    printfSerial("\nOS Begins... ", 0ul);
+}
+
 /* Timer1 ISR2 */
 ISR2(TimerISR)
 {
@@ -11,3 +17,11 @@ ISR2(TimerISR)
     IncrementCounter(counter1);
     printfSerial("\n%4ld: ", ++c);
 }
+
+
+/* write below your code */
+
+
+
+/*end*/
+
