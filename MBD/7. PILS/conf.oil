@@ -35,6 +35,9 @@ CPU mySystem {
 		APP_SRC = "bsw.cpp";
 		APP_SRC = "asw.c";
 		APP_SRC = "serial.cpp";
+                APP_SRC = "Sense.c";
+		APP_SRC = "Compute.c";
+		APP_SRC = "Actuate.c";
 	};
 	
 	COUNTER counter1 {	//manual counter
